@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unseen Studio Pro - Instagram Post Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0c10;
+            color: #c5c6c7;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .studio-container {
+            width: 100%;
+            max-width: 900px;
+            background: #1f2833;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 {
+            color: #66fcf1;
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 26px;
+        }
+        .tagline {
+            text-align: center;
+            color: #45a29e;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #66fcf1;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        select, textarea, input {
+            width: 100%;
+            padding: 12px;
+            background: #0b0c10;
+            border: 1px solid #45a29e;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .action-btn {
+            flex: 1;
+            background-color: #66fcf1;
+            color: #0b0c10;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .action-btn:hover {
+            background-color: #45a29e;
+            color: #fff;
+        }
+        .download-btn {
+            background-color: #ff4757;
+            color: white;
+        }
+        .download-btn:hover {
+            background-color: #ff6b81;
+        }
+        .preview-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        canvas {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            border: 2px solid #45a29e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="studio-container">
+        <h1>👁️ Unseen Studio Pro</h1>
+        <div class="tagline">Auto-Generate Professional Instagram Posts & Carousels for Any Niche</div>
+
+        <div class="form-group">
+            <label for="category">कॅटेगरी निवडा (Category):</label>
+            <select id="category">
+                <option value="space">🌌 Space & Science (डार्क कॉस्मिक थीम)</option>
+                <option value="finance">📈 Business & Stock Market (फायनान्स/मनी)</option>
+                <option value="movies">🎬 Hollywood / Bollywood Movies (सिनेमाटिक थीम)</option>
+                <option value="politics">📰 News & Politics (बोल्ड न्युज रूम)</option>
+                <option value="trending">🔥 General Trending Facts (रहस्यमयी)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="headline">मुख्य हेडलाईन (Headline):</label>
+            <input type="text" id="headline" placeholder="उदा. Did you know Earth has a second moon? 🌑">
+        </div>
+
+        <div class="form-group">
+            <label for="story">मुख्य माहिती / कॅप्शन (Main Story / Caption):</label>
+            <textarea id="story" placeholder="तुमची सविस्तर माहिती इथे लिहा..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="format">पोस्ट फॉरमॅट (Format):</label>
+            <select id="format">
+                <option value="single">Single Cover Post (एकच फोटो)</option>
+                <option value="slide1">Carousel Slide 1 (पहिली स्लाईड)</option>
+                <option value="slide2">Carousel Slide 2 (दुसरी स्लाईड)</option>
+            </select>
+        </div>
+
+        <div class="btn-container">
+            <button class="action-btn" onclick="generatePost()">⚡ डिझाइन तयार करा (Generate)</button>
+            <button class="action-btn download-btn" onclick="downloadImage()">📥 HD डाऊनलोड करा</button>
+        </div>
+
+        <div class="preview-section">
+            <label>लाईव्ह प्रीव्ह्यू (Live Preview):</label>
+            <canvas id="postCanvas" width="1080" height="1080"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("postCanvas");
+        const ctx = canvas.getContext("2d");
+
+        window.onload = () => {
+            drawDefaultCanvas();
+        };
+
+        function drawDefaultCanvas() {
+            ctx.fillStyle = "#0f0f13";
+            ctx.fillRect(0, 0, 1080, 1080);
+
+            ctx.fillStyle = "#ff4757";
+            ctx.fillRect(80, 100, 100, 15);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 50px Arial";
+            ctx.fillText("✨ Unseen Studio Pro", 80, 200);
+
+            ctx.fillStyle = "#a4b0be";
+            ctx.font = "36px Arial";
+            ctx.fillText("माहिती भरा आणि 'Generate' वर क्लिक करा!", 80, 300);
+
+            ctx.fillStyle = "#ff4757";
+            ctx.font = "32px Arial";
+            ctx.fillText("👁️ Follow @unseenreality_in", 80, 950);
+        }
+
+        function generatePost() {
+            let category = document.getElementById("category").value;
+            let headline = document.getElementById("headline").value || "तपासत आहे नवीन फॅक्ट...";
+            let story = document.getElementById("story").value || "इथे तुमची माहिती दिसेल...";
+            let format = document.getElementById("format").value;
+
+            let themeColor = "#ff4757";
+            let bgGradientColor = "#1e1e24";
+
+            if (category === "space") { themeColor = "#70a1ff"; bgGradientColor = "#0c1445"; }
+            else if (category === "finance") { themeColor = "#2ed573"; bgGradientColor = "#062e1b"; }
+            else if (category === "movies") { themeColor = "#ffa502"; bgGradientColor = "#2d1402"; }
+            else if (category === "politics") { themeColor = "#ff4757"; bgGradientColor = "#380206"; }
+
+            ctx.fillStyle = bgGradientColor;
+            ctx.fillRect(0, 0, 1080, 1080);
+
+            ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+            ctx.fillRect(0, 0, 1080, 1080);
+
+            ctx.fillStyle = themeColor;
+            ctx.fillRect(80, 80, 120, 16);
+
+            ctx.fillStyle = "#747d8c";
+            ctx.font = "bold 28px Arial";
+            let formatText = format === "single" ? "SINGLE POST" : (format === "slide1" ? "SLIDE 1 / 2" : "SLIDE 2 / 2");
+            ctx.fillText(formatText, 880, 100);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 52px Arial";
+            wrapText(ctx, headline, 80, 190, 920, 65);
+
+            ctx.fillStyle = "#dfe4ea";
+            ctx.font = "38px Arial";
+            let startY = headline.length > 50 ? 400 : 360;
+            wrapText(ctx, story, 80, startY, 920, 55);
+
+            ctx.fillStyle = themeColor;
+            ctx.font = "bold 34px Arial";
+            ctx.fillText("👁️ Follow @unseenreality_in for more dark realities.", 80, 960);
+        }
+
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+            let words = text.split(' ');
+            let line = '';
+
+            for(let n = 0; n < words.length; n++) {
+                let testLine = line + words[n] + ' ';
+                let metrics = context.measureText(testLine);
+                let testWidth = metrics.width;
+                if (testWidth > maxWidth && n > 0) {
+                    context.fillText(line, x, y);
+                    line = words[n] + ' ';
+                    y += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            context.fillText(line, x, y);
+        }
+
+        function downloadImage() {
+            let link = document.createElement('a');
+            link.download = 'unseen_post.jpg';
+            link.href = canvas.toDataURL('image/jpeg', 1.0);
+            link.click();
+
+            confetti({
+                particleCount: 60,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+    </script>
+
+</body>
+</html>
