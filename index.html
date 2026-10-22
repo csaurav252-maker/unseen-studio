@@ -1,9 +1,9 @@
-perfect_layout_code = """<!DOCTYPE html>
+final_perfect_code = """<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - Perfect Pro Layout</title>
+    <title>Unseen Studio Pro - Perfect Layout</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -45,7 +45,7 @@ perfect_layout_code = """<!DOCTYPE html>
             font-weight: bold;
             font-size: 14px;
         }
-        textarea, input {
+        textarea, input, select {
             width: 100%;
             padding: 12px;
             background: #0b0c10;
@@ -120,79 +120,114 @@ perfect_layout_code = """<!DOCTYPE html>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro (Reference Style)</h1>
-        <div class="tagline">वर एचडी फोटो आणि खाली मराठी/इंग्रजी आकर्षक टेक्स्ट डिझाईन</div>
+        <h1>👁️ Unseen Studio Pro</h1>
+        <div class="tagline">Var HD Photo ani Khali Black Background Professional Carousel Studio</div>
 
         <div class="form-group">
-            <label for="headline">मुख्य हेडलाईन (Headline / Title - English or Marathi):</label>
+            <label for="topicType">Topic Select Kara (Or Custom):</label>
+            <select id="topicType" onchange="setPresetText()">
+                <option value="octopus">🐙 World Octopus Day (Reference Style)</option>
+                <option value="space">🌌 Space & Earth Second Moon</option>
+                <option value="finance">📈 Stock Market & Money</option>
+                <option value="custom">✍️ Custom Topic (Swataha Lihane)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="headline">Headline (Title - English / Marathi):</label>
             <input type="text" id="headline" value="WORLD OCTOPUS DAY">
         </div>
 
         <div class="form-group">
-            <label for="story">संपूर्ण माहिती (Story / Description):</label>
+            <label for="story">Main Story / Description:</label>
             <textarea id="story">Observed on October 8, it celebrates these remarkable marine creatures and promotes ocean conservation. With three hearts, blue blood, eight arms, and incredible camouflage skills, octopuses are among the ocean's most fascinating animals.</textarea>
         </div>
 
         <div class="btn-container">
-            <button class="action-btn" onclick="processAndGenerate()">⚡ პროფेशनल स्लाईड्स बनवा</button>
-            <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 सर्व स्लाईड्स डाऊनलोड करा</button>
+            <button class="action-btn" onclick="generateSlides()">⚡ Professional Slides Banva</button>
+            <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 Sarv Slides Download Kara</button>
         </div>
 
         <div class="slides-preview-container" id="slidesContainer">
-            <p style="color:#45a29e; text-align:center; width:100%;">माहिती भरा आणि बटन दाबा!</p>
+            <p style="color:#45a29e; text-align:center; width:100%;">Mahiti bhara ani button daba!</p>
         </div>
     </div>
 
     <script>
         let generatedCanvases = [];
 
-        function extractKeyword(text) {
-            let cleanText = text.replace(/[^a-zA-Z0-9\s]/g, "").trim();
-            let words = cleanText.split(/\s+/).filter(w => w.length > 3);
-            const stopWords = ["this", "that", "there", "their", "about", "with", "from", "have", "more", "your", "know", "world", "day"];
-            let filteredWords = words.filter(w => !stopWords.includes(w.toLowerCase()));
+        function setPresetText() {
+            let type = document.getElementById("topicType").value;
+            let head = document.getElementById("headline");
+            let story = document.getElementById("story");
 
-            if (filteredWords.length > 0) {
-                return filteredWords[0];
+            if (type === "octopus") {
+                head.value = "WORLD OCTOPUS DAY";
+                story.value = "Observed on October 8, it celebrates these remarkable marine creatures and promotes ocean conservation. With three hearts, blue blood, eight arms, and incredible camouflage skills, octopuses are among the ocean's most fascinating animals.";
+            } else if (type === "space") {
+                head.value = "OUR NEW SECOND MOON";
+                story.value = "Scientists recently discovered a new asteroid orbiting Earth as a quasi-satellite. This temporary mini-moon is quietly revolving around our planet in the vast cosmos.";
+            } else if (type === "finance") {
+                head.value = "STOCK MARKET TRUTH";
+                story.value = "Building wealth in the stock market requires patience, discipline, and emotional control. Master your mindset before chasing quick profits.";
             }
-            return text.substring(0, 10) || "ocean marine";
         }
 
-        async function processAndGenerate() {
+        function getImageUrl(topic) {
+            let t = topic.toLowerCase();
+            if (t.includes("octopus") || t.includes("marine") || t.includes("ocean") || t.includes("fish")) {
+                return "https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?q=80&w=1080&auto=format&fit=crop";
+            } else if (t.includes("space") || t.includes("moon") || t.includes("earth") || t.includes("planet")) {
+                return "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop";
+            } else if (t.includes("stock") || t.includes("money") || t.includes("finance")) {
+                return "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1080&auto=format&fit=crop";
+            }
+            return "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1080&auto=format&fit=crop";
+        }
+
+        function generateSlides() {
             const headline = document.getElementById("headline").value.trim();
             const story = document.getElementById("story").value.trim();
-
             const container = document.getElementById("slidesContainer");
-            container.innerHTML = "<p style='color:#66fcf1;'>⚙️ डिझाईन तयार होत आहे...</p>";
+            
+            container.innerHTML = "<p style='color:#66fcf1;'>Generating slides...</p>";
             generatedCanvases = [];
 
-            const storyParts = splitTextIntoSlides(story);
-            const totalSlides = storyParts.length + 1;
+            let storyParts = splitText(story);
+            let totalSlides = storyParts.length + 1;
+            let imgUrl = getImageUrl(headline + " " + story);
 
-            container.innerHTML = "";
+            let img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = imgUrl;
 
-            const keyword = extractKeyword(headline + " " + story);
+            img.onload = () => {
+                container.innerHTML = "";
+                // Slide 1 (Cover)
+                renderSingleSlide(1, totalSlides, img, headline, "", true);
 
-            // Slide 1 (Cover Layout like reference image)
-            await createProfessionalSlide(1, totalSlides, headline, "", true, keyword);
+                // Content Slides
+                storyParts.forEach((part, idx) => {
+                    renderSingleSlide(idx + 2, totalSlides, img, "", part, false);
+                });
 
-            // Content Slides
-            for (let index = 0; index < storyParts.length; index++) {
-                await createProfessionalSlide(index + 2, totalSlides, "", storyParts[index], false, keyword);
-            }
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+            };
 
-            confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+            img.onerror = () => {
+                container.innerHTML = "<p style='color:#ff4757;'>Image load zali nahi, internet connection check kara!</p>";
+            };
         }
 
-        function splitTextIntoSlides(storyText) {
-            const words = storyText.split(' ');
+        function splitText(text) {
+            let words = text.split(' ');
             if (words.length <= 25) {
-                return [storyText];
+                return [text];
             } else if (words.length <= 50) {
-                const mid = Math.floor(words.length / 2);
+                let mid = Math.floor(words.length / 2);
                 return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
             } else {
-                const part = Math.floor(words.length / 3);
+                let part = Math.floor(words.length / 3);
                 return [
                     words.slice(0, part).join(' '),
                     words.slice(part, part * 2).join(' '),
@@ -201,69 +236,48 @@ perfect_layout_code = """<!DOCTYPE html>
             }
         }
 
-        function loadImage(keyword) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                const randomSeed = Math.floor(Math.random() * 9000) + 1;
-                img.src = `https://image.pollinations.ai/prompt/cinematic%20hd%20photography%20of%20${encodeURIComponent(keyword)}?width=1080&height=1080&seed=${randomSeed}&nologo=true`;
+        function renderSingleSlide(slideNum, totalSlides, bgImg, titleText, bodyText, isCover) {
+            let container = document.getElementById("slidesContainer");
 
-                img.onload = () => resolve(img);
-                img.onerror = () => resolve(null);
-            });
-        }
-
-        async function createProfessionalSlide(slideNum, totalSlides, titleText, bodyText, isCover, keyword) {
-            const container = document.getElementById("slidesContainer");
-
-            const card = document.createElement("div");
+            let card = document.createElement("div");
             card.className = "slide-card";
 
-            const titleLabel = document.createElement("div");
-            titleLabel.className = "slide-title";
-            titleLabel.innerText = `Slide ${slideNum} / ${totalSlides}`;
-            card.appendChild(titleLabel);
+            let label = document.createElement("div");
+            label.className = "slide-title";
+            label.innerText = `Slide ${slideNum} / ${totalSlides}`;
+            card.appendChild(label);
 
-            const canvas = document.createElement("canvas");
+            let canvas = document.createElement("canvas");
             canvas.width = 1080;
             canvas.height = 1080;
-            const ctx = canvas.getContext("2d");
+            let ctx = canvas.getContext("2d");
 
-            // 1. Khali pure black background fill karne
+            // 1. Pure black background for full canvas
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, 1080, 1080);
 
-            // 2. Varche 50% part madhe matching HD photo draw karne (Jaise reference image madhe ahe)
-            const bgImg = await loadImage(keyword);
-            if (bgImg) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.rect(0, 0, 1080, 540); // Varcha half area
-                ctx.clip();
-                ctx.drawImage(bgImg, 0, 0, 1080, 1080);
-                ctx.restore();
-            }
+            // 2. Top half (0 to 540px) madhe HD photo draw karne
+            ctx.drawImage(bgImg, 0, 0, 1080, 540, 0, 0, 1080, 540);
 
-            // Varche image ani khachya black background madhe sundar divider line
-            ctx.fillStyle = "#1a1a1a";
+            // Divider line between photo and black area
+            ctx.fillStyle = "#222222";
             ctx.fillRect(0, 535, 1080, 10);
 
-            // 3. Text rendering in Black Area (Kharcha half part)
+            // 3. Bottom half madhe clean text rendering (Marathi / English support)
+            ctx.textAlign = "center";
             if (isCover) {
-                // Title (Gold/Yellowish or White attractive look)
-                ctx.fillStyle = "#f1c40f";
-                ctx.font = "bold 64px Arial";
-                wrapTextCenter(ctx, titleText, 540, 640, 950, 75);
+                ctx.fillStyle = "#f1c40f"; // Gold title color like reference
+                ctx.font = "bold 58px Arial";
+                wrapText(ctx, titleText, 540, 640, 950, 70);
             } else {
                 ctx.fillStyle = "#ffffff";
                 ctx.font = "40px Arial";
-                wrapTextCenter(ctx, bodyText, 540, 600, 950, 58);
+                wrapText(ctx, bodyText, 540, 600, 950, 58);
             }
 
-            // Watermark at bottom
+            // Footer Watermark
             ctx.fillStyle = "#ff4757";
             ctx.font = "bold 30px Arial";
-            ctx.textAlign = "center";
             ctx.fillText("Follow @unseenreality_in", 540, 1020);
 
             card.appendChild(canvas);
@@ -271,8 +285,7 @@ perfect_layout_code = """<!DOCTYPE html>
             generatedCanvases.push({ canvas: canvas, name: `slide_${slideNum}.jpg` });
         }
 
-        function wrapTextCenter(context, text, x, y, maxWidth, lineHeight) {
-            context.textAlign = "center";
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
             let words = text.split(' ');
             let line = '';
             let lines = [];
@@ -300,7 +313,6 @@ perfect_layout_code = """<!DOCTYPE html>
                 alert("Adhi slides banva!");
                 return;
             }
-
             generatedCanvases.forEach((item, index) => {
                 setTimeout(() => {
                     let link = document.createElement('a');
@@ -317,6 +329,6 @@ perfect_layout_code = """<!DOCTYPE html>
 """
 
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write(perfect_layout_code)
+    f.write(final_perfect_code)
 
-print("✅ Reference image sarkhi navin layout chi 'index.html' file tyaar zali ahe!")
+print("✅ Perfect layoutchi navin index.html file tayar zali ahe!")
