@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+all_features_code = """<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - Instagram Post Generator</title>
+    <title>Unseen Studio Pro - Dynamic Carousel Studio</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -17,9 +17,9 @@
         }
         .studio-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             background: #1f2833;
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -57,20 +57,22 @@
         }
         textarea {
             resize: vertical;
-            height: 100px;
+            height: 120px;
         }
         .btn-container {
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
         .action-btn {
             flex: 1;
+            min-width: 180px;
             background-color: #66fcf1;
             color: #0b0c10;
             border: none;
             padding: 14px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
@@ -87,135 +89,190 @@
         .download-btn:hover {
             background-color: #ff6b81;
         }
-        .preview-section {
+        .slides-preview-container {
             margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+        }
+        .slide-card {
+            flex: 0 0 320px;
+            background: #0b0c10;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #45a29e;
             text-align: center;
         }
-        canvas {
+        .slide-card canvas {
             width: 100%;
-            max-width: 500px;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
-            border: 2px solid #45a29e;
+            border-radius: 8px;
+        }
+        .slide-title {
+            color: #66fcf1;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro</h1>
-        <div class="tagline">Auto-Generate Professional Instagram Posts & Carousels for Any Niche</div>
+        <h1>👁️ Unseen Studio Pro (Auto-Carousel)</h1>
+        <div class="tagline">विषयानुसार ऑटो फोटो बॅकग्राउंड आणि बहु-स्लाईड (Carousel) ऑटो-जनरेटर</div>
 
         <div class="form-group">
-            <label for="category">कॅटेगरी निवडा (Category):</label>
+            <label for="category">कॅटेगरी / विषय निवडा (Category):</label>
             <select id="category">
-                <option value="space">🌌 Space & Science (डार्क कॉस्मिक थीम)</option>
-                <option value="finance">📈 Business & Stock Market (फायनान्स/मनी)</option>
-                <option value="movies">🎬 Hollywood / Bollywood Movies (सिनेमाटिक थीम)</option>
-                <option value="politics">📰 News & Politics (बोल्ड न्युज रूम)</option>
-                <option value="trending">🔥 General Trending Facts (रहस्यमयी)</option>
+                <option value="space,planet,galaxy">🌌 Space & Science (ब्रह्मांड, ग्रह, रहस्य)</option>
+                <option value="business,money,stock">📈 Business & Finance (पैसे, मार्केट)</option>
+                <option value="movie,cinema,hollywood">🎬 Movies & Entertainment (सिनेमा)</option>
+                <option value="politics,news">📰 News & Politics (बातम्या)</option>
+                <option value="mystery,dark">🔥 General Dark Realities (डार्क सायन्स)</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="headline">मुख्य हेडलाईन (Headline):</label>
-            <input type="text" id="headline" placeholder="उदा. Did you know Earth has a second moon? 🌑">
+            <label for="headline">मुख्य हेडलाईन (Headline / Title):</label>
+            <input type="text" id="headline" placeholder="उदा. 99% लोग यह नहीं जानते कि हमारी पृथ्वी को नया चांद मिला है...">
         </div>
 
         <div class="form-group">
-            <label for="story">मुख्य माहिती / कॅप्शन (Main Story / Caption):</label>
-            <textarea id="story" placeholder="तुमची सविस्तर माहिती इथे लिहा..."></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="format">पोस्ट फॉरमॅट (Format):</label>
-            <select id="format">
-                <option value="single">Single Cover Post (एकच फोटो)</option>
-                <option value="slide1">Carousel Slide 1 (पहिली स्लाईड)</option>
-                <option value="slide2">Carousel Slide 2 (दुसरी स्लाईड)</option>
-            </select>
+            <label for="story">संपूर्ण माहिती (Full Story / Caption):</label>
+            <textarea id="story" placeholder="इथे तुमची पूर्ण माहिती किंवा कॅप्शन पेस्ट करा. माहिती जास्त असल्यास ऑटोमॅटिक Slide 1, Slide 2 आणि Slide 3 तयार होतील!"></textarea>
         </div>
 
         <div class="btn-container">
-            <button class="action-btn" onclick="generatePost()">⚡ डिझाइन तयार करा (Generate)</button>
-            <button class="action-btn download-btn" onclick="downloadImage()">📥 HD डाऊनलोड करा</button>
+            <button class="action-btn" onclick="processAndGenerate()">⚡ ऑटो स्लाईड्स तयार करा</button>
+            <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 सर्व स्लाईड्स एकत्र डाऊनलोड करा</button>
         </div>
 
-        <div class="preview-section">
-            <label>लाईव्ह प्रीव्ह्यू (Live Preview):</label>
-            <canvas id="postCanvas" width="1080" height="1080"></canvas>
+        <div class="slides-preview-container" id="slidesContainer">
+            <!-- जनरेट झालेल्या सर्व स्लाईड्सचे Preview कॅनव्हास इथे दिसतील -->
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById("postCanvas");
-        const ctx = canvas.getContext("2d");
+        let generatedCanvases = [];
 
-        window.onload = () => {
-            drawDefaultCanvas();
-        };
+        function processAndGenerate() {
+            const categoryKeyword = document.getElementById("category").value;
+            const headline = document.getElementById("headline").value.trim() || "ब्रह्मांड में ऐसी कितनी चीजें चुपचाप हमारे करीब आ जाती हैं?";
+            const story = document.getElementById("story").value.trim() || "हाल ही में वैज्ञानिकों ने एक नए एस्टेरॉयड को खोजा है जो हमारी पृथ्वी के चक्कर लगा रहा है। यह एक अस्थाई 'मिनी-मून' बन चुका है। अंतरिक्ष ऐसे अनसुलझे रहस्यों से भरा पड़ा है।";
 
-        function drawDefaultCanvas() {
-            ctx.fillStyle = "#0f0f13";
-            ctx.fillRect(0, 0, 1080, 1080);
+            const container = document.getElementById("slidesContainer");
+            container.innerHTML = "<p style='color:#66fcf1;'>🔍 एचडी बॅकग्राउंड फोटो शोधत आहे आणि स्लाईड्स तयार करत आहे...</p>";
+            generatedCanvases = [];
 
-            ctx.fillStyle = "#ff4757";
-            ctx.fillRect(80, 100, 100, 15);
+            // १. Unsplash वरून विषयानुसार HD इमेज मिळवणे
+            const bgImage = new Image();
+            bgImage.crossOrigin = "Anonymous";
+            const randomSeed = Math.floor(Math.random() * 1000);
+            bgImage.src = `https://source.unsplash.com/1080x1080/?${encodeURIComponent(categoryKeyword)}&sig=${randomSeed}`;
 
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 50px Arial";
-            ctx.fillText("✨ Unseen Studio Pro", 80, 200);
+            bgImage.onload = () => {
+                renderSlides(bgImage, headline, story);
+            };
 
-            ctx.fillStyle = "#a4b0be";
-            ctx.font = "36px Arial";
-            ctx.fillText("माहिती भरा आणि 'Generate' वर क्लिक करा!", 80, 300);
-
-            ctx.fillStyle = "#ff4757";
-            ctx.font = "32px Arial";
-            ctx.fillText("👁️ Follow @unseenreality_in", 80, 950);
+            bgImage.onerror = () => {
+                // इमेज लोड न झाल्यास बॅकअप ग्रॅडियंट इमेज वापरणे
+                renderSlides(null, headline, story);
+            };
         }
 
-        function generatePost() {
-            let category = document.getElementById("category").value;
-            let headline = document.getElementById("headline").value || "तपासत आहे नवीन फॅक्ट...";
-            let story = document.getElementById("story").value || "इथे तुमची माहिती दिसेल...";
-            let format = document.getElementById("format").value;
+        function splitTextIntoSlides(storyText) {
+            // मजकुराची लांबी तपासून १ ते ३ स्लाईड्समध्ये वाटणे
+            const words = storyText.split(' ');
+            if (words.length <= 25) {
+                return [storyText];
+            } else if (words.length <= 50) {
+                const mid = Math.floor(words.length / 2);
+                return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+            } else {
+                const part = Math.floor(words.length / 3);
+                return [
+                    words.slice(0, part).join(' '),
+                    words.slice(part, part * 2).join(' '),
+                    words.slice(part * 2).join(' ')
+                ];
+            }
+        }
 
-            let themeColor = "#ff4757";
-            let bgGradientColor = "#1e1e24";
+        function renderSlides(bgImg, headline, story) {
+            const container = document.getElementById("slidesContainer");
+            container.innerHTML = "";
+            generatedCanvases = [];
 
-            if (category === "space") { themeColor = "#70a1ff"; bgGradientColor = "#0c1445"; }
-            else if (category === "finance") { themeColor = "#2ed573"; bgGradientColor = "#062e1b"; }
-            else if (category === "movies") { themeColor = "#ffa502"; bgGradientColor = "#2d1402"; }
-            else if (category === "politics") { themeColor = "#ff4757"; bgGradientColor = "#380206"; }
+            const storyParts = splitTextIntoSlides(story);
+            const totalSlides = storyParts.length + 1; // Slide 1 (Headline/Cover) + Content Slides
 
-            ctx.fillStyle = bgGradientColor;
+            // === Slide 1: Cover Slide ===
+            createSingleSlideCanvas(1, totalSlides, bgImg, headline, "", true);
+
+            // === Content Slides ===
+            storyParts.forEach((partText, index) => {
+                createSingleSlideCanvas(index + 2, totalSlides, bgImg, "", partText, false);
+            });
+
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+        }
+
+        function createSingleSlideCanvas(slideNum, totalSlides, bgImg, titleText, bodyText, isCover) {
+            const container = document.getElementById("slidesContainer");
+
+            const card = document.createElement("div");
+            card.className = "slide-card";
+
+            const titleLabel = document.createElement("div");
+            titleLabel.className = "slide-title";
+            titleLabel.innerText = `Slide ${slideNum} / ${totalSlides}`;
+            card.appendChild(titleLabel);
+
+            const canvas = document.createElement("canvas");
+            canvas.width = 1080;
+            canvas.height = 1080;
+            const ctx = canvas.getContext("2d");
+
+            // बॅकग्राउंड ड्रॉ करणे
+            if (bgImg) {
+                ctx.drawImage(bgImg, 0, 0, 1080, 1080);
+            } else {
+                ctx.fillStyle = "#0c1445";
+                ctx.fillRect(0, 0, 1080, 1080);
+            }
+
+            // डार्क सिनेमॅटिक ओव्हरले (ज्याने टेक्स्ट लखलखीत वाचता येईल)
+            ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
             ctx.fillRect(0, 0, 1080, 1080);
 
-            ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
-            ctx.fillRect(0, 0, 1080, 1080);
-
-            ctx.fillStyle = themeColor;
-            ctx.fillRect(80, 80, 120, 16);
-
-            ctx.fillStyle = "#747d8c";
-            ctx.font = "bold 28px Arial";
-            let formatText = format === "single" ? "SINGLE POST" : (format === "slide1" ? "SLIDE 1 / 2" : "SLIDE 2 / 2");
-            ctx.fillText(formatText, 880, 100);
-
+            // स्लाईड नंबर इंडिकेटर
             ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 52px Arial";
-            wrapText(ctx, headline, 80, 190, 920, 65);
+            ctx.font = "bold 32px Arial";
+            ctx.fillText(`${slideNum}/${totalSlides}`, 950, 90);
 
-            ctx.fillStyle = "#dfe4ea";
-            ctx.font = "38px Arial";
-            let startY = headline.length > 50 ? 400 : 360;
-            wrapText(ctx, story, 80, startY, 920, 55);
+            if (isCover) {
+                // Cover Slide: मोठा बोल्ड हेडलाईन
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 58px Arial";
+                wrapText(ctx, `"${titleText}"`, 80, 480, 920, 75);
+            } else {
+                // Content Slide: सविस्तर मजकूर
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "46px Arial";
+                wrapText(ctx, bodyText, 80, 380, 920, 68);
+            }
 
-            ctx.fillStyle = themeColor;
-            ctx.font = "bold 34px Arial";
-            ctx.fillText("👁️ Follow @unseenreality_in for more dark realities.", 80, 960);
+            // वॉटरमार्क आणि ब्रँडिंग (तळाशी)
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 38px Arial";
+            ctx.fillText("Follow @unseenreality_in for more", 80, 920);
+            ctx.fillText("dark realities.", 80, 970);
+
+            card.appendChild(canvas);
+            container.appendChild(card);
+            generatedCanvases.push({ canvas: canvas, name: `slide_${slideNum}.jpg` });
         }
 
         function wrapText(context, text, x, y, maxWidth, lineHeight) {
@@ -237,19 +294,29 @@
             context.fillText(line, x, y);
         }
 
-        function downloadImage() {
-            let link = document.createElement('a');
-            link.download = 'unseen_post.jpg';
-            link.href = canvas.toDataURL('image/jpeg', 1.0);
-            link.click();
+        function downloadAllSlides() {
+            if (generatedCanvases.length === 0) {
+                alert("आधी 'ऑटो स्लाईड्स तयार करा' वर क्लिक करा!");
+                return;
+            }
 
-            confetti({
-                particleCount: 60,
-                spread: 70,
-                origin: { y: 0.6 }
+            generatedCanvases.forEach((item, index) => {
+                setTimeout(() => {
+                    let link = document.createElement('a');
+                    link.download = item.name;
+                    link.href = item.canvas.toDataURL('image/jpeg', 0.95);
+                    link.click();
+                }, index * 400); // डाउनलोड्समध्ये थोडा वेळ गॅप ठेवणे
             });
         }
     </script>
 
 </body>
 </html>
+"""
+
+# index.html मध्ये सेव्ह करणे
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(all_features_code)
+
+print("✅ ऑटो-फोटो बॅकग्राउंड आणि मल्टी-स्लाईड डाऊनलोडसह नवी 'index.html' फाईल सेव्ह झाली आहे!")
