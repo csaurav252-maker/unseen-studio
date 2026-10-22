@@ -3,7 +3,7 @@ perfect_position_code = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - Perfect Alignment</title>
+    <title>Unseen Studio Pro - Fixed Alignment</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -120,8 +120,8 @@ perfect_position_code = """<!DOCTYPE html>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro (Clean Alignment)</h1>
-        <div class="tagline">Text image chya agdi khali black area madhe perfectly centered</div>
+        <h1>👁️ Unseen Studio Pro (Perfect Text Offset)</h1>
+        <div class="tagline">Text image line chya khali pure black area madhe clean layout</div>
 
         <div class="form-group">
             <label for="searchQuery">Photo Search Topic (English):</label>
@@ -157,7 +157,7 @@ perfect_position_code = """<!DOCTYPE html>
             const story = document.getElementById("story").value.trim();
             const container = document.getElementById("slidesContainer");
 
-            container.innerHTML = `<p style='color:#66fcf1;'>⚙️ Generating perfectly aligned slides...</p>`;
+            container.innerHTML = `<p style='color:#66fcf1;'>⚙️ Generating slides with fixed alignment...</p>`;
             generatedCanvases = [];
 
             let storyParts = splitText(story);
@@ -230,29 +230,29 @@ perfect_position_code = """<!DOCTYPE html>
             canvas.height = 1080;
             let ctx = canvas.getContext("2d");
 
-            // 1. Solid Pure Black Background
+            // 1. Pure Matte Black Background
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, 1080, 1080);
 
-            // 2. Top Half HD Photo (0 to 500px area)
-            ctx.drawImage(bgImg, 0, 0, 1080, 500, 0, 0, 1080, 500);
+            // 2. Top Half HD Photo (0 to 480px)
+            ctx.drawImage(bgImg, 0, 0, 1080, 480, 0, 0, 1080, 480);
 
-            // Vibrant Accent Divider Line at Y = 500
+            // Vibrant Accent Divider Line at Y = 480
             let lineGradient = ctx.createLinearGradient(0, 0, 1080, 0);
             lineGradient.addColorStop(0, '#ff4757');
             lineGradient.addColorStop(0.5, '#ffd700');
             lineGradient.addColorStop(1, '#00ffff');
             ctx.fillStyle = lineGradient;
-            ctx.fillRect(0, 495, 1080, 8);
+            ctx.fillRect(0, 478, 1080, 6);
 
-            // 3. Text Alignment: Start comfortably below line in black region (Y = 650)
+            // 3. Text Rendering (Starts safely at Y = 560 in black area)
             if (isCover) {
-                renderVibrantText(ctx, titleText, 540, 680, 940, 75, "bold 64px sans-serif", true);
+                renderVibrantText(ctx, titleText, 540, 600, 940, 75, "bold 64px sans-serif", true);
             } else {
-                renderVibrantText(ctx, bodyText, 540, 640, 940, 62, "bold 44px sans-serif", false);
+                renderVibrantText(ctx, bodyText, 540, 560, 940, 62, "bold 44px sans-serif", false);
             }
 
-            // Top-Right Slide Badge
+            // Top-Right Slide Counter Badge
             ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
             ctx.beginPath();
             ctx.roundRect(920, 25, 130, 50, 25);
@@ -266,7 +266,7 @@ perfect_position_code = """<!DOCTYPE html>
             ctx.textAlign = "center";
             ctx.fillText(`${slideNum}/${totalSlides}`, 985, 60);
 
-            // Footer Watermark (Y = 1010)
+            // Footer Watermark
             ctx.fillStyle = "#ffd700";
             ctx.font = "bold 34px sans-serif";
             ctx.fillText("👁️ Follow @unseenreality_in", 540, 1010);
@@ -295,6 +295,7 @@ perfect_position_code = """<!DOCTYPE html>
             }
             if (currentLine.length > 0) lines.push(currentLine);
 
+            // Direct top-to-bottom rendering without auto-offsetting vertically
             let currentY = startY;
 
             const highlightWords = [
@@ -358,4 +359,4 @@ perfect_position_code = """<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(perfect_position_code)
 
-print("✅ Text positioning fix keli ahe! Navin index.html update zali.")
+print("✅ Text positioning completely fixed! Update index.html file.")
