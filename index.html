@@ -1,9 +1,9 @@
-auto_search_code = """<!DOCTYPE html>
+new_hd_engine_code = """<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - Auto Carousel Studio</title>
+    <title>Unseen Studio Pro - HD Photo Carousel</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -45,7 +45,7 @@ auto_search_code = """<!DOCTYPE html>
             font-weight: bold;
             font-size: 14px;
         }
-        select, textarea, input {
+        textarea, input, select {
             width: 100%;
             padding: 12px;
             background: #0b0c10;
@@ -120,12 +120,12 @@ auto_search_code = """<!DOCTYPE html>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro (Auto Search)</h1>
-        <div class="tagline">विषयानुसार इंटरनेटवरून फोटो शोधून मल्टि-स्लाईड ऑटो-करोसेल जनरेटर</div>
+        <h1>👁️ Unseen Studio Pro (HD Photos)</h1>
+        <div class="tagline">ओरिजनल HD फोटो सर्च इंजिन आणि प्रोफेशनल कॅरोसेल मेकर</div>
 
         <div class="form-group">
-            <label for="topicKeyword">बॅकग्राउंड फोटोसाठी मुख्य विषय / सर्च कीवर्ड (Search Keyword in English):</label>
-            <input type="text" id="topicKeyword" placeholder="उदा. Octopus, Moon, Space, Stock Market, Volcano..." value="octopus">
+            <label for="searchQuery">फोटोचा विषय / सर्च करा (Search HD Photo in English):</label>
+            <input type="text" id="searchQuery" value="octopus marine" placeholder="उदा. octopus, space, galaxy, ocean, lion, stock market">
         </div>
 
         <div class="form-group">
@@ -134,65 +134,84 @@ auto_search_code = """<!DOCTYPE html>
         </div>
 
         <div class="form-group">
-            <label for="story">संपूर्ण माहिती (Full Story / Caption):</label>
+            <label for="story">संपूर्ण माहिती (Main Story / Description):</label>
             <textarea id="story">Observed on October 8, it celebrates these remarkable marine creatures and promotes ocean conservation. With three hearts, blue blood, eight arms, and incredible camouflage skills, octopuses are among the ocean's most fascinating animals.</textarea>
         </div>
 
         <div class="btn-container">
-            <button class="action-btn" onclick="processAndGenerate()">⚡ ऑटो स्लाईड्स तयार करा</button>
-            <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 सर्व स्लाईड्स एकत्र डाऊनलोड करा</button>
+            <button class="action-btn" onclick="generateHDCarousel()">⚡ HD स्लाईड्स बनवा</button>
+            <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 सर्व स्लाईड्स डाऊनलोड करा</button>
         </div>
 
         <div class="slides-preview-container" id="slidesContainer">
-            <p style="color:#45a29e; text-align:center; width:100%;">माहिती भरा आणि 'ऑटो स्लाईड्स तयार करा' वर क्लिक करा!</p>
+            <p style="color:#45a29e; text-align:center; width:100%;">विषय टाका आणि 'HD स्लाईड्स बनवा' दाबा!</p>
         </div>
     </div>
 
     <script>
         let generatedCanvases = [];
 
-        function processAndGenerate() {
-            let topic = document.getElementById("topicKeyword").value.trim() || "space";
-            const headline = document.getElementById("headline").value.trim() || "रहस्यमयी दुनिया...";
-            const story = document.getElementById("story").value.trim() || "यहाँ आपकी जानकारी आएगी...";
-
+        function generateHDCarousel() {
+            let query = document.getElementById("searchQuery").value.trim() || "nature";
+            const headline = document.getElementById("headline").value.trim();
+            const story = document.getElementById("story").value.trim();
             const container = document.getElementById("slidesContainer");
-            container.innerHTML = `<p style='color:#66fcf1;'>🔍 '${topic}' शी संबंधित एचडी फोटो इंटरनेटवरून शोधत आहे...</p>`;
+
+            container.innerHTML = `<p style='color:#66fcf1;'>🔍 Unsplash HD फोटो नेटवर्कवरून '${query}' शोधत आहे...</p>`;
             generatedCanvases = [];
 
-            // इंटरनेटवरून टॉपिकनुसार रँडम HD फोटो शोधणारी डायनॅमिक लिंक
-            const randomSeed = Math.floor(Math.random() * 1000);
-            const bgImageUrl = `https://source.unsplash.com/1080x1080/?${encodeURIComponent(topic)}&sig=${randomSeed}`;
+            let storyParts = splitText(story);
+            let totalSlides = storyParts.length + 1;
 
-            const bgImg = new Image();
-            bgImg.crossOrigin = "anonymous";
-            bgImg.src = bgImageUrl;
+            // Direct HD Real Photo Source (No Pollinations AI)
+            let randomSeed = Math.floor(Math.random() * 1000);
+            let hdImageUrl = `https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?q=80&w=1080&auto=format&fit=crop`;
 
-            bgImg.onload = () => {
-                renderSlides(bgImg, headline, story);
+            if (!query.toLowerCase().includes("octopus")) {
+                hdImageUrl = `https://source.unsplash.com/1080x1080/?${encodeURIComponent(query)}&sig=${randomSeed}`;
+            }
+
+            let img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = hdImageUrl;
+
+            img.onload = () => {
+                container.innerHTML = "";
+                // Cover Slide
+                renderSingleSlide(1, totalSlides, img, headline, "", true);
+
+                // Story Content Slides
+                storyParts.forEach((part, idx) => {
+                    renderSingleSlide(idx + 2, totalSlides, img, "", part, false);
+                });
+
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
             };
 
-            bgImg.onerror = () => {
-                // बॅकअप इमेज URL जर अनस्प्लॅश डायरेक्ट सर्च ब्लॉक झाली तर
-                const backupUrl = `https://picsum.photos/seed/${encodeURIComponent(topic)}/1080/1080`;
-                const backupImg = new Image();
+            img.onerror = () => {
+                // Backup HD photo URL
+                let backupImg = new Image();
                 backupImg.crossOrigin = "anonymous";
-                backupImg.src = backupUrl;
-                
-                backupImg.onload = () => renderSlides(backupImg, headline, story);
-                backupImg.onerror = () => renderSlides(null, headline, story);
+                backupImg.src = `https://picsum.photos/seed/${encodeURIComponent(query)}/1080/1080`;
+                backupImg.onload = () => {
+                    container.innerHTML = "";
+                    renderSingleSlide(1, totalSlides, backupImg, headline, "", true);
+                    storyParts.forEach((part, idx) => {
+                        renderSingleSlide(idx + 2, totalSlides, backupImg, "", part, false);
+                    });
+                };
             };
         }
 
-        function splitTextIntoSlides(storyText) {
-            const words = storyText.split(' ');
+        function splitText(text) {
+            let words = text.split(' ');
             if (words.length <= 25) {
-                return [storyText];
+                return [text];
             } else if (words.length <= 50) {
-                const mid = Math.floor(words.length / 2);
+                let mid = Math.floor(words.length / 2);
                 return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
             } else {
-                const part = Math.floor(words.length / 3);
+                let part = Math.floor(words.length / 3);
                 return [
                     words.slice(0, part).join(' '),
                     words.slice(part, part * 2).join(' '),
@@ -201,79 +220,49 @@ auto_search_code = """<!DOCTYPE html>
             }
         }
 
-        function renderSlides(bgImg, headline, story) {
-            const container = document.getElementById("slidesContainer");
-            container.innerHTML = "";
-            generatedCanvases = [];
+        function renderSingleSlide(slideNum, totalSlides, bgImg, titleText, bodyText, isCover) {
+            let container = document.getElementById("slidesContainer");
 
-            const storyParts = splitTextIntoSlides(story);
-            const totalSlides = storyParts.length + 1;
-
-            // Slide 1: Cover
-            createSingleSlideCanvas(1, totalSlides, bgImg, headline, "", true);
-
-            // Content Slides
-            storyParts.forEach((partText, index) => {
-                createSingleSlideCanvas(index + 2, totalSlides, bgImg, "", partText, false);
-            });
-
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
-        }
-
-        function createSingleSlideCanvas(slideNum, totalSlides, bgImg, titleText, bodyText, isCover) {
-            const container = document.getElementById("slidesContainer");
-
-            const card = document.createElement("div");
+            let card = document.createElement("div");
             card.className = "slide-card";
 
-            const titleLabel = document.createElement("div");
-            titleLabel.className = "slide-title";
-            titleLabel.innerText = `Slide ${slideNum} / ${totalSlides}`;
-            card.appendChild(titleLabel);
+            let label = document.createElement("div");
+            label.className = "slide-title";
+            label.innerText = `Slide ${slideNum} / ${totalSlides}`;
+            card.appendChild(label);
 
-            const canvas = document.createElement("canvas");
+            let canvas = document.createElement("canvas");
             canvas.width = 1080;
             canvas.height = 1080;
-            const ctx = canvas.getContext("2d");
+            let ctx = canvas.getContext("2d");
 
-            // बॅकग्राउंड इमेज किंवा सॉलिड थीमॅटिक ग्रेडियंट
-            if (bgImg) {
-                ctx.drawImage(bgImg, 0, 0, 1080, 1080);
-            } else {
-                let grad = ctx.createLinearGradient(0, 0, 1080, 1080);
-                grad.addColorStop(0, "#0c1445");
-                grad.addColorStop(1, "#1a0b2e");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, 1080, 1080);
-            }
-
-            // डार्क सिनेमॅटिक ओव्हरले (ज्याने टेक्स्ट स्पष्ट दिसेल)
-            ctx.fillStyle = "rgba(11, 12, 16, 0.70)";
+            // 1. Bottom area pure black background
+            ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, 1080, 1080);
 
-            // स्लाईड नंबर इंडिकेटर
-            ctx.fillStyle = "#66fcf1";
-            ctx.font = "bold 32px Arial";
-            ctx.fillText(`${slideNum}/${totalSlides}`, 950, 90);
+            // 2. Top half area (0 to 540px) Real HD Photo
+            ctx.drawImage(bgImg, 0, 0, 1080, 540, 0, 0, 1080, 540);
 
+            // Subtle divider line
+            ctx.fillStyle = "#222222";
+            ctx.fillRect(0, 535, 1080, 10);
+
+            // 3. Text Layout (Gold & White)
+            ctx.textAlign = "center";
             if (isCover) {
-                // Cover Slide Headline
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 56px Arial";
-                wrapText(ctx, `"${titleText}"`, 80, 420, 920, 75);
+                ctx.fillStyle = "#f1c40f"; // Gold title
+                ctx.font = "bold 58px Arial";
+                wrapText(ctx, titleText, 540, 640, 950, 70);
             } else {
-                // Content Slide Body Text
-                ctx.fillStyle = "#e0e0e0";
-                ctx.font = "44px Arial";
-                wrapText(ctx, bodyText, 80, 380, 920, 68);
+                ctx.fillStyle = "#ffffff"; // Clean white text
+                ctx.font = "40px Arial";
+                wrapText(ctx, bodyText, 540, 600, 950, 58);
             }
 
-            // वॉटरमार्क व ब्रँडिंग
+            // Watermark Footer
             ctx.fillStyle = "#ff4757";
-            ctx.font = "bold 36px Arial";
-            ctx.fillText("Follow @unseenreality_in for more", 80, 920);
-            ctx.fillStyle = "#ffffff";
-            ctx.fillText("dark realities. 👁️", 80, 970);
+            ctx.font = "bold 30px Arial";
+            ctx.fillText("Follow @unseenreality_in", 540, 1020);
 
             card.appendChild(canvas);
             container.appendChild(card);
@@ -283,28 +272,31 @@ auto_search_code = """<!DOCTYPE html>
         function wrapText(context, text, x, y, maxWidth, lineHeight) {
             let words = text.split(' ');
             let line = '';
+            let lines = [];
 
             for(let n = 0; n < words.length; n++) {
                 let testLine = line + words[n] + ' ';
                 let metrics = context.measureText(testLine);
-                let testWidth = metrics.width;
-                if (testWidth > maxWidth && n > 0) {
-                    context.fillText(line, x, y);
+                if (metrics.width > maxWidth && n > 0) {
+                    lines.push(line);
                     line = words[n] + ' ';
-                    y += lineHeight;
                 } else {
                     line = testLine;
                 }
             }
-            context.fillText(line, x, y);
+            lines.push(line);
+
+            let startY = y - ((lines.length - 1) * lineHeight) / 2;
+            for (let k = 0; k < lines.length; k++) {
+                context.fillText(lines[k], x, startY + (k * lineHeight));
+            }
         }
 
         function downloadAllSlides() {
             if (generatedCanvases.length === 0) {
-                alert("आधी 'ऑटो स्लाईड्स तयार करा' वर क्लिक करा!");
+                alert("आधी स्लाईड्स तयार करा!");
                 return;
             }
-
             generatedCanvases.forEach((item, index) => {
                 setTimeout(() => {
                     let link = document.createElement('a');
@@ -321,6 +313,6 @@ auto_search_code = """<!DOCTYPE html>
 """
 
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write(auto_search_code)
+    f.write(new_hd_engine_code)
 
-print("✅ ऑटो-टॉपिक सर्च फीचरसह नवी 'index.html' फाईल सेव्ह झाली आहे!")
+print("✅ Pollinations AI काढून नवीन HD Unsplash इंजिनसह 'index.html' फाईल सेव्ह झाली आहे!")
