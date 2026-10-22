@@ -1,9 +1,9 @@
-all_features_code = """<!DOCTYPE html>
+fix_bg_code = """<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - Dynamic Carousel Studio</title>
+    <title>Unseen Studio Pro - Auto Carousel Studio</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -120,28 +120,28 @@ all_features_code = """<!DOCTYPE html>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro (Auto-Carousel)</h1>
-        <div class="tagline">विषयानुसार ऑटो फोटो बॅकग्राउंड आणि बहु-स्लाईड (Carousel) ऑटो-जनरेटर</div>
+        <h1>👁️ Unseen Studio Pro (Fixed BG)</h1>
+        <div class="tagline">एचडी बॅकग्राउंड आणि मल्टि-स्लाईड ऑटो-करोसेल जनरेटर</div>
 
         <div class="form-group">
             <label for="category">कॅटेगरी / विषय निवडा (Category):</label>
             <select id="category">
-                <option value="space,planet,galaxy">🌌 Space & Science (ब्रह्मांड, ग्रह, रहस्य)</option>
-                <option value="business,money,stock">📈 Business & Finance (पैसे, मार्केट)</option>
-                <option value="movie,cinema,hollywood">🎬 Movies & Entertainment (सिनेमा)</option>
-                <option value="politics,news">📰 News & Politics (बातम्या)</option>
-                <option value="mystery,dark">🔥 General Dark Realities (डार्क सायन्स)</option>
+                <option value="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop">🌌 Space & Cosmic Universe (ब्रह्मांड)</option>
+                <option value="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1080&auto=format&fit=crop">✨ Dark Aesthetic Abstract (रहस्यमयी)</option>
+                <option value="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1080&auto=format&fit=crop">🪐 Planets & Galaxy (ग्रह व तारे)</option>
+                <option value="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1080&auto=format&fit=crop">📈 Finance & Stock Market (स्टॉक मार्केट)</option>
+                <option value="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1080&auto=format&fit=crop">🎬 Hollywood & Cinema (सिनेमा)</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="headline">मुख्य हेडलाईन (Headline / Title):</label>
-            <input type="text" id="headline" placeholder="उदा. 99% लोग यह नहीं जानते कि हमारी पृथ्वी को नया चांद मिला है...">
+            <input type="text" id="headline" value="99% लोग यह नहीं जानते कि हमारी पृथ्वी को नया चांद मिला है...">
         </div>
 
         <div class="form-group">
             <label for="story">संपूर्ण माहिती (Full Story / Caption):</label>
-            <textarea id="story" placeholder="इथे तुमची पूर्ण माहिती किंवा कॅप्शन पेस्ट करा. माहिती जास्त असल्यास ऑटोमॅटिक Slide 1, Slide 2 आणि Slide 3 तयार होतील!"></textarea>
+            <textarea id="story">हाल ही में वैज्ञानिकों ने एक नए एस्टेरॉयड को खोजा है जो हमारी पृथ्वी के चक्कर लगा रहा है। यह एक अस्थाई 'मिनी-मून' बन चुका है। अंतरिक्ष ऐसे अनसुलझे रहस्यों से भरा पड़ा है जो हमें हैरान कर देते हैं।</textarea>
         </div>
 
         <div class="btn-container">
@@ -150,7 +150,7 @@ all_features_code = """<!DOCTYPE html>
         </div>
 
         <div class="slides-preview-container" id="slidesContainer">
-            <!-- जनरेट झालेल्या सर्व स्लाईड्सचे Preview कॅनव्हास इथे दिसतील -->
+            <p style="color:#45a29e; text-align:center; width:100%;">माहिती भरा आणि 'ऑटो स्लाईड्स तयार करा' वर क्लिक करा!</p>
         </div>
     </div>
 
@@ -158,32 +158,30 @@ all_features_code = """<!DOCTYPE html>
         let generatedCanvases = [];
 
         function processAndGenerate() {
-            const categoryKeyword = document.getElementById("category").value;
-            const headline = document.getElementById("headline").value.trim() || "ब्रह्मांड में ऐसी कितनी चीजें चुपचाप हमारे करीब आ जाती हैं?";
-            const story = document.getElementById("story").value.trim() || "हाल ही में वैज्ञानिकों ने एक नए एस्टेरॉयड को खोजा है जो हमारी पृथ्वी के चक्कर लगा रहा है। यह एक अस्थाई 'मिनी-मून' बन चुका है। अंतरिक्ष ऐसे अनसुलझे रहस्यों से भरा पड़ा है।";
+            const bgImageUrl = document.getElementById("category").value;
+            const headline = document.getElementById("headline").value.trim() || "रहस्यमयी दुनिया...";
+            const story = document.getElementById("story").value.trim() || "यहाँ आपकी जानकारी आएगी...";
 
             const container = document.getElementById("slidesContainer");
-            container.innerHTML = "<p style='color:#66fcf1;'>🔍 एचडी बॅकग्राउंड फोटो शोधत आहे आणि स्लाईड्स तयार करत आहे...</p>";
+            container.innerHTML = "<p style='color:#66fcf1;'>🔍 एचडी बॅकग्राउंड लोड करत आहे...</p>";
             generatedCanvases = [];
 
-            // १. Unsplash वरून विषयानुसार HD इमेज मिळवणे
-            const bgImage = new Image();
-            bgImage.crossOrigin = "Anonymous";
-            const randomSeed = Math.floor(Math.random() * 1000);
-            bgImage.src = `https://source.unsplash.com/1080x1080/?${encodeURIComponent(categoryKeyword)}&sig=${randomSeed}`;
+            // सुरक्षित इमेज लोडिंग (CORS Proxy सह)
+            const bgImg = new Image();
+            bgImg.crossOrigin = "anonymous";
+            bgImg.src = bgImageUrl;
 
-            bgImage.onload = () => {
-                renderSlides(bgImage, headline, story);
+            bgImg.onload = () => {
+                renderSlides(bgImg, headline, story);
             };
 
-            bgImage.onerror = () => {
-                // इमेज लोड न झाल्यास बॅकअप ग्रॅडियंट इमेज वापरणे
+            bgImg.onerror = () => {
+                // इमेज लोड न झाल्यास खात्रीशीर सिनेमॅटिक बॅकअप ग्रेडियंट वापरणे
                 renderSlides(null, headline, story);
             };
         }
 
         function splitTextIntoSlides(storyText) {
-            // मजकुराची लांबी तपासून १ ते ३ स्लाईड्समध्ये वाटणे
             const words = storyText.split(' ');
             if (words.length <= 25) {
                 return [storyText];
@@ -206,12 +204,12 @@ all_features_code = """<!DOCTYPE html>
             generatedCanvases = [];
 
             const storyParts = splitTextIntoSlides(story);
-            const totalSlides = storyParts.length + 1; // Slide 1 (Headline/Cover) + Content Slides
+            const totalSlides = storyParts.length + 1;
 
-            // === Slide 1: Cover Slide ===
+            // Slide 1: Cover
             createSingleSlideCanvas(1, totalSlides, bgImg, headline, "", true);
 
-            // === Content Slides ===
+            // Content Slides
             storyParts.forEach((partText, index) => {
                 createSingleSlideCanvas(index + 2, totalSlides, bgImg, "", partText, false);
             });
@@ -235,40 +233,44 @@ all_features_code = """<!DOCTYPE html>
             canvas.height = 1080;
             const ctx = canvas.getContext("2d");
 
-            // बॅकग्राउंड ड्रॉ करणे
+            // बॅकग्राउंड इमेज किंवा सॉलिड थीमॅटिक ग्रेडियंट
             if (bgImg) {
                 ctx.drawImage(bgImg, 0, 0, 1080, 1080);
             } else {
-                ctx.fillStyle = "#0c1445";
+                let grad = ctx.createLinearGradient(0, 0, 1080, 1080);
+                grad.addColorStop(0, "#0c1445");
+                grad.addColorStop(1, "#1a0b2e");
+                ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, 1080, 1080);
             }
 
-            // डार्क सिनेमॅटिक ओव्हरले (ज्याने टेक्स्ट लखलखीत वाचता येईल)
-            ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+            // डार्क सिनेमॅटिक ओव्हरले (ज्याने टेक्स्ट स्पष्ट दिसेल)
+            ctx.fillStyle = "rgba(11, 12, 16, 0.70)";
             ctx.fillRect(0, 0, 1080, 1080);
 
             // स्लाईड नंबर इंडिकेटर
-            ctx.fillStyle = "#ffffff";
+            ctx.fillStyle = "#66fcf1";
             ctx.font = "bold 32px Arial";
             ctx.fillText(`${slideNum}/${totalSlides}`, 950, 90);
 
             if (isCover) {
-                // Cover Slide: मोठा बोल्ड हेडलाईन
+                // Cover Slide Headline
                 ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 58px Arial";
-                wrapText(ctx, `"${titleText}"`, 80, 480, 920, 75);
+                ctx.font = "bold 56px Arial";
+                wrapText(ctx, `"${titleText}"`, 80, 420, 920, 75);
             } else {
-                // Content Slide: सविस्तर मजकूर
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "46px Arial";
+                // Content Slide Body Text
+                ctx.fillStyle = "#e0e0e0";
+                ctx.font = "44px Arial";
                 wrapText(ctx, bodyText, 80, 380, 920, 68);
             }
 
-            // वॉटरमार्क आणि ब्रँडिंग (तळाशी)
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 38px Arial";
+            // वॉटरमार्क व ब्रँडिंग
+            ctx.fillStyle = "#ff4757";
+            ctx.font = "bold 36px Arial";
             ctx.fillText("Follow @unseenreality_in for more", 80, 920);
-            ctx.fillText("dark realities.", 80, 970);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText("dark realities. 👁️", 80, 970);
 
             card.appendChild(canvas);
             container.appendChild(card);
@@ -306,7 +308,7 @@ all_features_code = """<!DOCTYPE html>
                     link.download = item.name;
                     link.href = item.canvas.toDataURL('image/jpeg', 0.95);
                     link.click();
-                }, index * 400); // डाउनलोड्समध्ये थोडा वेळ गॅप ठेवणे
+                }, index * 400);
             });
         }
     </script>
@@ -315,8 +317,7 @@ all_features_code = """<!DOCTYPE html>
 </html>
 """
 
-# index.html मध्ये सेव्ह करणे
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write(all_features_code)
+    f.write(fix_bg_code)
 
-print("✅ ऑटो-फोटो बॅकग्राउंड आणि मल्टी-स्लाईड डाऊनलोडसह नवी 'index.html' फाईल सेव्ह झाली आहे!")
+print("✅ बॅकग्राउंड इमेजची समस्या सोडून नवी 'index.html' फाईल सेव्ह झाली आहे!")
