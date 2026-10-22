@@ -1,9 +1,9 @@
-new_hd_engine_code = """<!DOCTYPE html>
+insta_style_code = """<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - HD Photo Carousel</title>
+    <title>Unseen Studio Pro - Viral Instagram Text Studio</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -120,8 +120,8 @@ new_hd_engine_code = """<!DOCTYPE html>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro (HD Photos)</h1>
-        <div class="tagline">ओरिजनल HD फोटो सर्च इंजिन आणि प्रोफेशनल कॅरोसेल मेकर</div>
+        <h1>👁️ Unseen Studio Pro (Viral Insta Style)</h1>
+        <div class="tagline">रंगीबेरंगी बोल्ड हायलाइट फॉन्ट आणि सिनेमॅटिक फोटो लेआउट</div>
 
         <div class="form-group">
             <label for="searchQuery">फोटोचा विषय / सर्च करा (Search HD Photo in English):</label>
@@ -139,12 +139,12 @@ new_hd_engine_code = """<!DOCTYPE html>
         </div>
 
         <div class="btn-container">
-            <button class="action-btn" onclick="generateHDCarousel()">⚡ HD स्लाईड्स बनवा</button>
+            <button class="action-btn" onclick="generateHDCarousel()">⚡ व्हायरल इंस्टाग्राम स्लाईड्स बनवा</button>
             <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 सर्व स्लाईड्स डाऊनलोड करा</button>
         </div>
 
         <div class="slides-preview-container" id="slidesContainer">
-            <p style="color:#45a29e; text-align:center; width:100%;">विषय टाका आणि 'HD स्लाईड्स बनवा' दाबा!</p>
+            <p style="color:#45a29e; text-align:center; width:100%;">माहिती भरा आणि 'व्हायरल इंस्टाग्राम स्लाईड्स बनवा' वर क्लिक करा!</p>
         </div>
     </div>
 
@@ -157,13 +157,12 @@ new_hd_engine_code = """<!DOCTYPE html>
             const story = document.getElementById("story").value.trim();
             const container = document.getElementById("slidesContainer");
 
-            container.innerHTML = `<p style='color:#66fcf1;'>🔍 Unsplash HD फोटो नेटवर्कवरून '${query}' शोधत आहे...</p>`;
+            container.innerHTML = `<p style='color:#66fcf1;'>⚙️ उच्च दर्जाच्या फॉन्ट आणि एचडी फोटोसह स्लाईड्स जनरेट होत आहेत...</p>`;
             generatedCanvases = [];
 
             let storyParts = splitText(story);
             let totalSlides = storyParts.length + 1;
 
-            // Direct HD Real Photo Source (No Pollinations AI)
             let randomSeed = Math.floor(Math.random() * 1000);
             let hdImageUrl = `https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?q=80&w=1080&auto=format&fit=crop`;
 
@@ -177,19 +176,14 @@ new_hd_engine_code = """<!DOCTYPE html>
 
             img.onload = () => {
                 container.innerHTML = "";
-                // Cover Slide
                 renderSingleSlide(1, totalSlides, img, headline, "", true);
-
-                // Story Content Slides
                 storyParts.forEach((part, idx) => {
                     renderSingleSlide(idx + 2, totalSlides, img, "", part, false);
                 });
-
                 confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
             };
 
             img.onerror = () => {
-                // Backup HD photo URL
                 let backupImg = new Image();
                 backupImg.crossOrigin = "anonymous";
                 backupImg.src = `https://picsum.photos/seed/${encodeURIComponent(query)}/1080/1080`;
@@ -236,65 +230,118 @@ new_hd_engine_code = """<!DOCTYPE html>
             canvas.height = 1080;
             let ctx = canvas.getContext("2d");
 
-            // 1. Bottom area pure black background
-            ctx.fillStyle = "#000000";
+            // 1. Pure Matte Black Background
+            ctx.fillStyle = "#050505";
             ctx.fillRect(0, 0, 1080, 1080);
 
-            // 2. Top half area (0 to 540px) Real HD Photo
-            ctx.drawImage(bgImg, 0, 0, 1080, 540, 0, 0, 1080, 540);
+            // 2. Top Half HD Photo with Smooth Border
+            ctx.drawImage(bgImg, 0, 0, 1080, 520, 0, 0, 1080, 520);
 
-            // Subtle divider line
-            ctx.fillStyle = "#222222";
-            ctx.fillRect(0, 535, 1080, 10);
+            // Gold/Cyan Divider Accent Line
+            let lineGradient = ctx.createLinearGradient(0, 0, 1080, 0);
+            lineGradient.addColorStop(0, '#ff4757');
+            lineGradient.addColorStop(0.5, '#ffd700');
+            lineGradient.addColorStop(1, '#00d2d3');
+            ctx.fillStyle = lineGradient;
+            ctx.fillRect(0, 515, 1080, 10);
 
-            // 3. Text Layout (Gold & White)
-            ctx.textAlign = "center";
+            // 3. Highlighted Colorful Text Engine
             if (isCover) {
-                ctx.fillStyle = "#f1c40f"; // Gold title
-                ctx.font = "bold 58px Arial";
-                wrapText(ctx, titleText, 540, 640, 950, 70);
+                // Headline Text
+                renderColorfulText(ctx, titleText, 540, 630, 960, 75, "bold 62px 'Impact', 'Trebuchet MS', sans-serif", true);
             } else {
-                ctx.fillStyle = "#ffffff"; // Clean white text
-                ctx.font = "40px Arial";
-                wrapText(ctx, bodyText, 540, 600, 950, 58);
+                // Body Text
+                renderColorfulText(ctx, bodyText, 540, 590, 960, 62, "bold 42px 'Segoe UI', Arial, sans-serif", false);
             }
 
-            // Watermark Footer
-            ctx.fillStyle = "#ff4757";
-            ctx.font = "bold 30px Arial";
-            ctx.fillText("Follow @unseenreality_in", 540, 1020);
+            // Top Slide Badge (1/3)
+            ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+            ctx.beginPath();
+            ctx.roundRect(930, 30, 110, 48, 20);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 26px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText(`${slideNum}/${totalSlides}`, 985, 63);
+
+            // Footer Watermark
+            ctx.fillStyle = "#ffd700";
+            ctx.font = "bold 32px Arial";
+            ctx.fillText("👁️ Follow @unseenreality_in", 540, 1025);
 
             card.appendChild(canvas);
             container.appendChild(card);
             generatedCanvases.push({ canvas: canvas, name: `slide_${slideNum}.jpg` });
         }
 
-        function wrapText(context, text, x, y, maxWidth, lineHeight) {
-            let words = text.split(' ');
-            let line = '';
-            let lines = [];
+        // शब्द तपासून महत्त्वाच्या शब्दांना पिवळा/लाल/सायन रंग देणारे इंजिन
+        function renderColorfulText(ctx, text, centerX, startY, maxWidth, lineHeight, fontStyle, isTitle) {
+            ctx.font = fontStyle;
+            ctx.textAlign = "center";
 
-            for(let n = 0; n < words.length; n++) {
-                let testLine = line + words[n] + ' ';
-                let metrics = context.measureText(testLine);
-                if (metrics.width > maxWidth && n > 0) {
-                    lines.push(line);
-                    line = words[n] + ' ';
+            let rawWords = text.split(' ');
+            let lines = [];
+            let currentLine = [];
+
+            for (let i = 0; i < rawWords.length; i++) {
+                let testLine = currentLine.concat(rawWords[i]).join(' ');
+                if (ctx.measureText(testLine).width > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = [rawWords[i]];
                 } else {
-                    line = testLine;
+                    currentLine.push(rawWords[i]);
                 }
             }
-            lines.push(line);
+            if (currentLine.length > 0) lines.push(currentLine);
 
-            let startY = y - ((lines.length - 1) * lineHeight) / 2;
-            for (let k = 0; k < lines.length; k++) {
-                context.fillText(lines[k], x, startY + (k * lineHeight));
+            let totalHeight = lines.length * lineHeight;
+            let currentY = startY - (totalHeight / 4);
+
+            const highlightKeywords = [
+                "OCTOPUS", "DAY", "WORLD", "EARTH", "MOON", "BLACK", "HOLE", "SPACE", "MONEY", "MARKET", 
+                "OCTOBER", "8", "THREE", "HEARTS", "BLUE", "BLOOD", "EIGHT", "ARMS", "CAMOUFLAGE", "OCEAN",
+                "रहस्यमयी", "पृथ्वी", "चांद", "वैज्ञानिक", "समुद्र", "अमर"
+            ];
+
+            for (let l = 0; l < lines.length; l++) {
+                let lineWords = lines[l];
+                
+                // Calculate total width of line to center it
+                let totalLineWidth = 0;
+                let wordWidths = [];
+                let spaceWidth = ctx.measureText(" ").width;
+
+                for (let w = 0; w < lineWords.length; w++) {
+                    let width = ctx.measureText(lineWords[w]).width;
+                    wordWidths.push(width);
+                    totalLineWidth += width + (w < lineWords.length - 1 ? spaceWidth : 0);
+                }
+
+                let startX = centerX - (totalLineWidth / 2);
+
+                for (let w = 0; w < lineWords.length; w++) {
+                    let word = lineWords[w];
+                    let cleanWord = word.toUpperCase().replace(/[^A-Z0-9मराठी]/g, "");
+
+                    // Choose color
+                    if (highlightKeywords.includes(cleanWord) || isTitle) {
+                        ctx.fillStyle = (w % 2 === 0) ? "#FFD700" : "#00D2D3"; // Gold & Cyan Alternate
+                    } else {
+                        ctx.fillStyle = "#FFFFFF"; // Clean White
+                    }
+
+                    ctx.textAlign = "left";
+                    ctx.fillText(word, startX, currentY);
+                    startX += wordWidths[w] + spaceWidth;
+                }
+
+                currentY += lineHeight;
             }
         }
 
         function downloadAllSlides() {
             if (generatedCanvases.length === 0) {
-                alert("आधी स्लाईड्स तयार करा!");
+                alert("आधी स्लाईड्स बनवा!");
                 return;
             }
             generatedCanvases.forEach((item, index) => {
@@ -313,6 +360,6 @@ new_hd_engine_code = """<!DOCTYPE html>
 """
 
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write(new_hd_engine_code)
+    f.write(insta_style_code)
 
-print("✅ Pollinations AI काढून नवीन HD Unsplash इंजिनसह 'index.html' फाईल सेव्ह झाली आहे!")
+print("✅ व्हायरल इन्स्टाग्राम टेक्स्ट स्टाइलसह नवीन 'index.html' फाईल सेव्ह झाली आहे!")
