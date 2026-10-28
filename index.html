@@ -1,9 +1,9 @@
-unsplash_exact_code = """<!DOCTYPE html>
+gym_story_code = """<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - Exact Photo Search</title>
+    <title>Unseen Studio Pro - Gym Comeback Special</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -45,33 +45,7 @@ unsplash_exact_code = """<!DOCTYPE html>
             font-weight: bold;
             font-size: 14px;
         }
-        .google-search-box {
-            display: flex;
-            align-items: center;
-            background: #0b0c10;
-            border: 2px solid #45a29e;
-            border-radius: 30px;
-            padding: 5px 15px;
-            transition: 0.3s;
-        }
-        .google-search-box:focus-within {
-            border-color: #66fcf1;
-            box-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
-        }
-        .google-search-box span {
-            font-size: 18px;
-            margin-right: 10px;
-        }
-        .google-search-box input {
-            border: none;
-            outline: none;
-            background: transparent;
-            color: #fff;
-            font-size: 16px;
-            width: 100%;
-            padding: 8px 0;
-        }
-        textarea, input[type="text"]:not(.google-input) {
+        textarea, input {
             width: 100%;
             padding: 12px;
             background: #0b0c10;
@@ -146,34 +120,31 @@ unsplash_exact_code = """<!DOCTYPE html>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro (Exact Keyword Search)</h1>
-        <div class="tagline">Type any keyword (moon, tree, mobile, space) for exact matching HD photos</div>
+        <h1>👁️ Unseen Studio Pro (Gym Attitude Special)</h1>
+        <div class="tagline">High Contrast Gym Quote & Story Post Generator</div>
 
         <div class="form-group">
-            <label for="searchQuery">🔍 Search HD Photo Topic:</label>
-            <div class="google-search-box">
-                <span>🔍</span>
-                <input type="text" id="searchQuery" class="google-input" value="moon" placeholder="Type: moon, tree, mobile, galaxy, ocean...">
-            </div>
+            <label for="searchQuery">🔍 Search Topic (English):</label>
+            <input type="text" id="searchQuery" value="gym bodybuilder dark" placeholder="Type: gym, bodybuilding, dark fitness...">
         </div>
 
         <div class="form-group">
             <label for="headline">Headline / Title:</label>
-            <input type="text" id="headline" value="BEAUTIFUL FULL MOON">
+            <input type="text" id="headline" value="HARD WORK & COMEBACK">
         </div>
 
         <div class="form-group">
-            <label for="story">Main Story / Description:</label>
-            <textarea id="story">The moon is Earth's only natural satellite. It influences ocean tides, stabilizes Earth's wobble, and has inspired human culture, science, and space exploration for generations.</textarea>
+            <label for="story">Main Story / Quote:</label>
+            <textarea id="story">Kehte hain gym mein muscle tutate hain aur judte hain toh dard hota hai, par hamein logon ne kuch iss kadar toda hai ki ab dard ka ahesas nahi hota!</textarea>
         </div>
 
         <div class="btn-container">
-            <button class="action-btn" onclick="generateInstaSlides()">⚡ Slides Banva</button>
-            <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 Sarv Slides Download Kara</button>
+            <button class="action-btn" onclick="generateInstaSlides()">⚡ Post & Story Slide Banva</button>
+            <button class="action-btn download-btn" onclick="downloadAllSlides()">📥 Download Kara</button>
         </div>
 
         <div class="slides-preview-container" id="slidesContainer">
-            <p style="color:#45a29e; text-align:center; width:100%;">Mahiti bhara ani button daba!</p>
+            <p style="color:#45a29e; text-align:center; width:100%;">Button vr click karun slides generate kara!</p>
         </div>
     </div>
 
@@ -181,20 +152,19 @@ unsplash_exact_code = """<!DOCTYPE html>
         let generatedCanvases = [];
 
         function generateInstaSlides() {
-            let query = document.getElementById("searchQuery").value.trim().toLowerCase() || "nature";
+            let query = document.getElementById("searchQuery").value.trim().toLowerCase() || "gym";
             const headline = document.getElementById("headline").value.trim();
             const story = document.getElementById("story").value.trim();
             const container = document.getElementById("slidesContainer");
 
-            container.innerHTML = `<p style='color:#66fcf1;'>⚙️ Fetching exact HD photos for "${query}"...</p>`;
+            container.innerHTML = `<p style='color:#66fcf1;'>⚙️ HD Gym Photos load hot ahet...</p>`;
             generatedCanvases = [];
 
             let storyParts = splitText(story);
             let totalSlides = storyParts.length + 1;
 
-            // Direct accurate Unsplash source URL utilizing the user's exact keyword search
             let randomSig = Math.floor(Math.random() * 500) + 1;
-            let hdImageUrl = `https://images.unsplash.com/featured/1080x1080/?${encodeURIComponent(query)}&sig=${randomSig}`;
+            let hdImageUrl = `https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1080&auto=format&fit=crop`;
 
             let img = new Image();
             img.crossOrigin = "anonymous";
@@ -210,10 +180,9 @@ unsplash_exact_code = """<!DOCTYPE html>
             };
 
             img.onerror = () => {
-                // Fallback to source.unsplash source if featured endpoint fails
                 let backupImg = new Image();
                 backupImg.crossOrigin = "anonymous";
-                backupImg.src = `https://source.unsplash.com/1080x1080/?${encodeURIComponent(query)}`;
+                backupImg.src = `https://picsum.photos/seed/fitness/1080/1080`;
                 backupImg.onload = () => {
                     container.innerHTML = "";
                     renderInstaSlide(1, totalSlides, backupImg, headline, "", true);
@@ -226,18 +195,11 @@ unsplash_exact_code = """<!DOCTYPE html>
 
         function splitText(text) {
             let words = text.split(' ');
-            if (words.length <= 22) {
+            if (words.length <= 20) {
                 return [text];
-            } else if (words.length <= 45) {
+            } else {
                 let mid = Math.floor(words.length / 2);
                 return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
-            } else {
-                let part = Math.floor(words.length / 3);
-                return [
-                    words.slice(0, part).join(' '),
-                    words.slice(part, part * 2).join(' '),
-                    words.slice(part * 2).join(' ')
-                ];
             }
         }
 
@@ -257,34 +219,34 @@ unsplash_exact_code = """<!DOCTYPE html>
             canvas.height = 1080;
             let ctx = canvas.getContext("2d");
 
-            // 1. Pure Matte Black Background
+            // 1. Pure Black Background
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, 1080, 1080);
 
-            // 2. Top Half HD Photo (0 to 480px)
+            // 2. Top Half Image (0 to 480px)
             ctx.drawImage(bgImg, 0, 0, 1080, 480, 0, 0, 1080, 480);
 
-            // Vibrant Accent Divider Line at Y = 480
+            // Red/Gold Gradient Line
             let lineGradient = ctx.createLinearGradient(0, 0, 1080, 0);
             lineGradient.addColorStop(0, '#ff4757');
             lineGradient.addColorStop(0.5, '#ffd700');
-            lineGradient.addColorStop(1, '#00ffff');
+            lineGradient.addColorStop(1, '#ff6b81');
             ctx.fillStyle = lineGradient;
             ctx.fillRect(0, 478, 1080, 6);
 
-            // 3. Text Rendering (Starts safely at Y = 710 in black area)
+            // 3. Text Alignment (Clean safe space at startY = 710)
             if (isCover) {
                 renderVibrantText(ctx, titleText, 540, 720, 940, 75, "bold 64px sans-serif", true);
             } else {
                 renderVibrantText(ctx, bodyText, 540, 710, 940, 62, "bold 44px sans-serif", false);
             }
 
-            // Top-Right Slide Counter Badge
-            ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+            // Slide Counter Badge
+            ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
             ctx.beginPath();
             ctx.roundRect(920, 25, 130, 50, 25);
             ctx.fill();
-            ctx.strokeStyle = "#ffd700";
+            ctx.strokeStyle = "#ff4757";
             ctx.lineWidth = 2;
             ctx.stroke();
             
@@ -300,7 +262,7 @@ unsplash_exact_code = """<!DOCTYPE html>
 
             card.appendChild(canvas);
             container.appendChild(card);
-            generatedCanvases.push({ canvas: canvas, name: `slide_${slideNum}.jpg` });
+            generatedCanvases.push({ canvas: canvas, name: `gym_slide_${slideNum}.jpg` });
         }
 
         function renderVibrantText(ctx, text, centerX, startY, maxWidth, lineHeight, fontStyle, isTitle) {
@@ -325,8 +287,8 @@ unsplash_exact_code = """<!DOCTYPE html>
             let currentY = startY;
 
             const highlightWords = [
-                "MOON", "EARTH", "NATURAL", "SATELLITE", "OCEAN", "TIDES", "SPACE", "EXPLORATION", 
-                "TREE", "MOBILE", "PHONE", "TECHNOLOGY", "GALAXY", "SUN", "WORLD", "LIFE", "FUTURE"
+                "GYM", "MUSCLE", "DARD", "TODA", "HARD", "WORK", "COMEBACK", 
+                "TUTATE", "JUDTE", "AHESAS", "PEOPLE", "LOGON"
             ];
 
             for (let l = 0; l < lines.length; l++) {
@@ -348,7 +310,7 @@ unsplash_exact_code = """<!DOCTYPE html>
                     let cleanWord = word.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
                     if (highlightWords.includes(cleanWord) || isTitle) {
-                        ctx.fillStyle = (w % 2 === 0) ? "#FFD700" : "#00FFFF";
+                        ctx.fillStyle = (w % 2 === 0) ? "#FF4757" : "#FFD700";
                     } else {
                         ctx.fillStyle = "#FFFFFF";
                     }
@@ -364,7 +326,7 @@ unsplash_exact_code = """<!DOCTYPE html>
 
         function downloadAllSlides() {
             if (generatedCanvases.length === 0) {
-                alert("Adhi slides banva!");
+                alert("Adhi slides generate kara!");
                 return;
             }
             generatedCanvases.forEach((item, index) => {
@@ -383,6 +345,6 @@ unsplash_exact_code = """<!DOCTYPE html>
 """
 
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write(unsplash_exact_code)
+    f.write(gym_story_code)
 
-print("✅ Updated index.html with exact Unsplash featured keyword search endpoint!")
+print("✅ Perfect Gym Special index.html file generated!")
