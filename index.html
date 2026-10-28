@@ -1,9 +1,9 @@
-perfect_final_code = """<!DOCTYPE html>
+google_search_bar_code = """<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unseen Studio Pro - Final Perfect Alignment</title>
+    <title>Unseen Studio Pro - Google Style Search</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -36,16 +36,45 @@ perfect_final_code = """<!DOCTYPE html>
             margin-bottom: 25px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: #66fcf1;
             font-weight: bold;
             font-size: 14px;
         }
-        textarea, input, select {
+        
+        /* Google Style Search Bar */
+        .google-search-box {
+            display: flex;
+            align-items: center;
+            background: #0b0c10;
+            border: 2px solid #45a29e;
+            border-radius: 30px;
+            padding: 5px 15px;
+            transition: 0.3s;
+        }
+        .google-search-box:focus-within {
+            border-color: #66fcf1;
+            box-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
+        }
+        .google-search-box span {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        .google-search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+            width: 100%;
+            padding: 8px 0;
+        }
+
+        textarea, input[type="text"]:not(.google-input) {
             width: 100%;
             padding: 12px;
             background: #0b0c10;
@@ -120,12 +149,16 @@ perfect_final_code = """<!DOCTYPE html>
 <body>
 
     <div class="studio-container">
-        <h1>👁️ Unseen Studio Pro (Final Clean Edition)</h1>
-        <div class="tagline">Text position perfectly set below divider line in black space</div>
+        <h1>👁️ Unseen Studio Pro (Google Image Search)</h1>
+        <div class="tagline">Google sarkha image search bar ani clean text layout</div>
 
+        <!-- Google Style Search Bar -->
         <div class="form-group">
-            <label for="searchQuery">Photo Search Topic (English):</label>
-            <input type="text" id="searchQuery" value="octopus marine" placeholder="e.g. octopus, space, galaxy, ocean, stock market">
+            <label for="searchQuery">🔍 Search HD Photo Topic (Google Style):</label>
+            <div class="google-search-box">
+                <span>🔍</span>
+                <input type="text" id="searchQuery" class="google-input" value="octopus marine" placeholder="Type image topic e.g. galaxy, dark nature, stock market...">
+            </div>
         </div>
 
         <div class="form-group">
@@ -157,18 +190,14 @@ perfect_final_code = """<!DOCTYPE html>
             const story = document.getElementById("story").value.trim();
             const container = document.getElementById("slidesContainer");
 
-            container.innerHTML = `<p style='color:#66fcf1;'>⚙️ Generating perfectly aligned slides...</p>`;
+            container.innerHTML = `<p style='color:#66fcf1;'>⚙️ Searching photo for "${query}" and generating slides...</p>`;
             generatedCanvases = [];
 
             let storyParts = splitText(story);
             let totalSlides = storyParts.length + 1;
 
             let randomSeed = Math.floor(Math.random() * 1000);
-            let hdImageUrl = `https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?q=80&w=1080&auto=format&fit=crop`;
-
-            if (!query.toLowerCase().includes("octopus")) {
-                hdImageUrl = `https://source.unsplash.com/1080x1080/?${encodeURIComponent(query)}&sig=${randomSeed}`;
-            }
+            let hdImageUrl = `https://source.unsplash.com/1080x1080/?${encodeURIComponent(query)}&sig=${randomSeed}`;
 
             let img = new Image();
             img.crossOrigin = "anonymous";
@@ -230,14 +259,14 @@ perfect_final_code = """<!DOCTYPE html>
             canvas.height = 1080;
             let ctx = canvas.getContext("2d");
 
-            // 1. Pure Matte Black Background
+            // 1. Pure Black Background
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, 1080, 1080);
 
-            // 2. Top Half HD Photo (0 to 480px)
+            // 2. Top Half Photo
             ctx.drawImage(bgImg, 0, 0, 1080, 480, 0, 0, 1080, 480);
 
-            // Vibrant Accent Divider Line at Y = 480
+            // Vibrant Accent Line
             let lineGradient = ctx.createLinearGradient(0, 0, 1080, 0);
             lineGradient.addColorStop(0, '#ff4757');
             lineGradient.addColorStop(0.5, '#ffd700');
@@ -245,14 +274,14 @@ perfect_final_code = """<!DOCTYPE html>
             ctx.fillStyle = lineGradient;
             ctx.fillRect(0, 478, 1080, 6);
 
-            // 3. Text Rendering (Starts safely at Y = 710 in black area)
+            // 3. Text Alignment (startY = 710)
             if (isCover) {
                 renderVibrantText(ctx, titleText, 540, 720, 940, 75, "bold 64px sans-serif", true);
             } else {
                 renderVibrantText(ctx, bodyText, 540, 710, 940, 62, "bold 44px sans-serif", false);
             }
 
-            // Top-Right Slide Counter Badge
+            // Top Badge
             ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
             ctx.beginPath();
             ctx.roundRect(920, 25, 130, 50, 25);
@@ -266,7 +295,7 @@ perfect_final_code = """<!DOCTYPE html>
             ctx.textAlign = "center";
             ctx.fillText(`${slideNum}/${totalSlides}`, 985, 60);
 
-            // Footer Watermark
+            // Watermark
             ctx.fillStyle = "#ffd700";
             ctx.font = "bold 34px sans-serif";
             ctx.fillText("👁️ Follow @unseenreality_in", 540, 1010);
@@ -356,6 +385,6 @@ perfect_final_code = """<!DOCTYPE html>
 """
 
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write(perfect_final_code)
+    f.write(google_search_bar_code)
 
-print("✅ Final index.html updated with startY = 710!")
+print("✅ Google Style Search Bar added in index.html!")
